@@ -2,13 +2,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-dataset = pd.read_excel(r"C:\Users\Alokp\OneDrive\Desktop\Varshin\AIML\HousePricePrediction.xlsx")
+dataset = pd.read_excel("HousePricePrediction.xlsx")
 
 print(dataset.head(5))
-dataset.shape
+print("Dataset shape:", dataset.shape)
 obj = (dataset.dtypes == 'object')
 object_cols = list(obj[obj].index)
 print("Categorical variables:",len(object_cols))
+
 
 int_ = (dataset.dtypes == 'int')
 num_cols = list(int_[int_].index)
@@ -49,7 +50,8 @@ dataset.drop(['Id'],
 dataset['SalePrice'] = dataset['SalePrice'].fillna(
   dataset['SalePrice'].mean())
 new_dataset = dataset.dropna()
-new_dataset.isnull().sum()
+print(new_dataset.isnull().sum())
+
 from sklearn.preprocessing import OneHotEncoder
 
 s = (new_dataset.dtypes == 'object')
@@ -64,7 +66,6 @@ OH_cols.index = new_dataset.index
 OH_cols.columns = OH_encoder.get_feature_names_out()
 df_final = new_dataset.drop(object_cols, axis=1)
 df_final = pd.concat([df_final, OH_cols], axis=1)
-from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
 X = df_final.drop(['SalePrice'], axis=1)
@@ -78,4 +79,12 @@ model_LR = LinearRegression()
 model_LR.fit(X_train, Y_train)
 Y_pred = model_LR.predict(X_valid)
 from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error
-print(mean_absolute_percentage_error(Y_valid, Y_pred))
+print("Model Accuracy (MAPE):", mean_absolute_percentage_error(Y_valid, Y_pred))
+print("MAE:", mean_absolute_error(Y_valid, Y_pred))
+print("R2 Score:", model_LR.score(X_valid, Y_valid))
+
+plt.scatter(Y_valid, Y_pred)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Actual vs Predicted Prices")
+plt.show()
