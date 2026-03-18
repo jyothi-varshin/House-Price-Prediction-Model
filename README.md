@@ -34,3 +34,10 @@ The project uses the following Python libraries:
 1. Clone the repository:
    ```bash
    git clone https://github.com/jyothi-varshin/HousePricePrediction.git
+
+## License
+This project is licensed under the MIT License.
+
+You are free to use, modify, and distribute this project with proper attribution.
+
+For more details, refer to the LICENSE file in this repository.
